@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Memory Profiler</title>
+        <meta name="description" content="Memory Profiler">
+        <meta name="viewport" content="width=device-width">
+        <link rel="stylesheet" href="css/app.css">
+        <script type="text/javascript" src="js/pad.js" defer></script>
+        <script type="text/javascript" src="js/hub.js" defer></script>
+        <script type="text/javascript" src="js/profilerManager.js" defer></script>
+        <script type="text/javascript" src="js/mockMemoryProfiler.js" defer></script>
+        <script type="text/javascript" src="js/app.js" defer></script>
+    </head>
+    <body>
+      <div id="wrapper">
+        <div id="leftPanel">
+          <section id="TreePanel"> 
+          </section>
+        </div>
+        <div id="rightPanel">
+          <section id="controlPanel">
+            <input type="text" id="searchBar" />
+            <button type="button" id="startRecord">start</button>
+            <button type="button" id="stopRecord">stop</button>
+          </section>
+          <section id="padPanel">
+            <canvas id="pad" width="320" height="800"></canvas>
+          </section>
+          <section id="infoTable">
+          </section>
+        </div>
+      </div>
+    </body>
+</html>
