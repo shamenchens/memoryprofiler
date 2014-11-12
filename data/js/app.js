@@ -9,8 +9,6 @@ function start() {
   if (! ('memprofiler' in navigator)) {
     console.log('use mock !!!!');
     navigator.memprofiler = new MockMemProfiler();
-    // var test =  navigator.memprofiler.getFrameNameTable();
-    // console.log('test:' + JSON.stringify(test[1]));
   } else {
     console.log('use real memProfiler');
   }
