@@ -13,21 +13,25 @@
         <script type="text/javascript" src="js/app.js" defer></script>
     </head>
     <body>
-      <div id="wrapper">
-        <div id="leftPanel">
-          <section id="TreePanel"> 
+      <div class="wrapper">
+        <div class="leftPanel subWrapper">
+          <section id="hubPanel" class="panel">
+            <button type="button" id="startRecord">Start</button>
+            <button type="button" id="stopRecord">Stop</button>
+          </section>
+          <section id="TreePanel" class="panel">
+            <h3>Tree View</h3>
           </section>
         </div>
-        <div id="rightPanel">
-          <section id="controlPanel">
+        <div class="rightPanel subWrapper"> 
+          <section id="controlPanel" class="panel">
             <input type="text" id="searchBar" />
-            <button type="button" id="startRecord">start</button>
-            <button type="button" id="stopRecord">stop</button>
+            <button type="button" id="startSearch">Search</button>
           </section>
-          <section id="padPanel">
+          <section id="padPanel" class="panel">
             <canvas id="pad" width="320" height="800"></canvas>
           </section>
-          <section id="infoTable">
+          <section id="infoTable" class="panel">
           </section>
         </div>
       </div>
