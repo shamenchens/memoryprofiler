@@ -17,6 +17,7 @@ function start() {
   var profilerManager = new ProfilerManager();
 
   var hubOption = {
+    'searchBar': 'searchBar',
     'startRecord': 'startRecord',
     'stopRecord': 'stopRecord',
     'infoTable': 'infoTable',
