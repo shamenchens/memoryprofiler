@@ -8,15 +8,15 @@
   ProfilerManager.prototype.init = function PM_init() {
     this.PR = {};
     this.memoryProfiler = navigator.memprofiler;
-  }
+  };
 
   ProfilerManager.prototype.startRecord = function PM_startRecord() {
     this.memoryProfiler.startProfiler();
-  }
+  };
 
   ProfilerManager.prototype.stopRecord = function PM_stopRecord() {
     this.memoryProfiler.stopProfiler();
-  }
+  };
 
   ProfilerManager.prototype.getProfileResults  = 
   function PM_getProfileResults () {
@@ -25,7 +25,7 @@
     this.PR.traces = this.memoryProfiler.getStacktraceTable(window);
     this.PR.allocated = this.memoryProfiler.getAllocatedEntries(window);
     this.dispatchEvent('dataReady');
-  }
+  };
 
   ProfilerManager.prototype.example1 = function example1() {
     var names = this.PR.names,
@@ -52,13 +52,13 @@
       }
     }
     
-    hist.sort(function(a,b) {return b.selfSize - a.selfSize});
+    hist.sort(function(a,b) {return b.selfSize - a.selfSize;});
     
     console.log("    SelfSize   TotalSize  Name");
     for (i = 0; i < 20 && i < hist.length; i++) {
       console.log("%12.0f%12.0f  %s", hist[i].selfSize, hist[i].totalSize, names[hist[i].nameIdx]);
     }
-  }
+  };
 
   ProfilerManager.prototype.example2 = function example2() {
     var names = this.PR.names,
@@ -87,13 +87,13 @@
       }
     }
     
-    hist.sort(function(a,b) {return b.selfAccu - a.selfAccu})
+    hist.sort(function(a,b) {return b.selfAccu - a.selfAccu;});
     
     console.log("    SelfAccu   TotalAccu  Name");
     for (i = 0; i < 20 && i < hist.length; i++) {
       console.log("%12.0f%12.0f  %s", hist[i].selfAccu, hist[i].totalAccu, names[hist[i].nameIdx]);
     }
-  }
+  };
 
   // XXX should be rename
   ProfilerManager.prototype.example3 = function PM_example3() {
@@ -127,7 +127,7 @@
       }
     }
     
-    hist.sort(function(a,b) {return b.selfHWM - a.selfHWM});
+    hist.sort(function(a,b) {return b.selfHWM - a.selfHWM;});
     
     console.log("     SelfHWM    TotalHWM  Name");
     for (i = j = 0; j < 20 && i < hist.length; i++) {
@@ -136,7 +136,7 @@
       console.log("%12.0f%12.0f  %s", hist[i].selfHWM, hist[i].totalHWM, names[hist[i].nameIdx]);
       j++;
     }
-  }
+  };
 
   ProfilerManager.prototype.dispatchEvent = 
   function PM_dispatchEvent(name, detail) {
@@ -146,7 +146,7 @@
 
   ProfilerManager.prototype.stop = function PM_stop() {
     this.PR = {};
-  }
+  };
   exports.ProfilerManager = ProfilerManager;
 }(window));
 
