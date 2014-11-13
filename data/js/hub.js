@@ -55,7 +55,7 @@
     },
 
     showInfo: function HUB_showInfo(evt) {
-      this._elements.infoTable.textContent = 'done!!!';
+      // this._elements.infoTable.textContent = 'done!!!';
     },
 
     stop: function HUB_stop() {

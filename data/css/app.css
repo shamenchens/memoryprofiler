@@ -51,7 +51,7 @@ section#hubPanel button#startRecord {
 }
 
 section#TreePanel {
-  height: calc(100% - 100px);
+  height: calc(100% - 130px);
 }
 
 /* lrightPanel */
@@ -96,5 +96,54 @@ section#padPanel canvas  {
 
 /*infoTable*/ 
 section#infoTable {
+  width: 90%; 
   height: 300px;
+  overflow: auto;
+}
+
+section#infoTable > ul{
+  margin:20px 0px 0px 50px;
+  list-style: none;
+}
+
+section#infoTable ul > li{
+  margin: -4px 0px 0px 0px;
+  padding: 0px;
+  background-color: #b8b8b8; 
+}
+
+section#infoTable ul > li:nth-child(even){
+  background-color: #afafaf;
+}
+
+section#infoTable ul > li:hover{
+  background-color: #fff;
+}
+
+section#infoTable ul > li > span{
+  display: inline-block;
+  width: 68px;
+  height: 30px;
+  overflow : hidden;
+  padding: 3px;
+  border: 1px solid #f8f8f8;
+  border-bottom: 0px;
+}
+section#infoTable ul > li:first-child > span{
+  border-bottom: 1px;
+  font-weight: bold;
+}
+section#infoTable ul > li:last-child > span{
+  border: 1px solid #c8c8c8;
+}
+span.sortable {
+  cursor: pointer;
+}
+section#infoTable ul > li > span:not(:first-child){
+  border-left: 0px;
+}
+section#infoTable ul > li > span:last-child {
+  width: calc(100% - 480px);
+  text-overflow : ellipsis;
+  white-space : nowrap;
 }
