@@ -34,4 +34,11 @@ function start() {
   };
   var padManager = new PadManager(padOption);
   padManager.start();
+
+  var rankOption = {
+    'elements': {'infoTable': document.getElementById('infoTable')},
+    'profilerManager': profilerManager
+  };
+  var rankManager = new RankManager(rankOption);
+  rankManager.start();
 }

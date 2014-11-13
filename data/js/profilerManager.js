@@ -138,6 +138,48 @@
     }
   };
 
+  ProfilerManager.prototype.getHistogram = function PM_getHistogram() {
+    var names = this.PR.names,
+        traces = this.PR.traces,
+        allocated = this.PR.allocated;
+    var hist = [];
+    var t, e, i, j;
+    
+    for (i = 0; i < names.length; i++) {
+      hist[i] = {selfAccu: 0, totalAccu: 0, selfSize: 0, totalSize: 0,
+                 selfHWM: 0, totalHWM: 0, nameIdx: i};
+    }
+    
+    for (i = 0; i < allocated.length; i++) {
+      var visited = [];
+      e = allocated[i];
+      t = traces[e.traceIdx];
+      if (e.size > 0) {
+        hist[t.nameIdx].selfAccu += e.size;
+      }
+
+      hist[t.nameIdx].selfSize += e.size;
+      if (hist[t.nameIdx].selfSize > hist[t.nameIdx].selfHWM) {
+        hist[t.nameIdx].selfHWM = hist[t.nameIdx].selfSize;
+      }
+      for (j = e.traceIdx; j != 0; j = traces[j].parentIdx) {
+        t = traces[j];
+        if (!visited[t.nameIdx]) {
+          visited[t.nameIdx] = true;
+          hist[t.nameIdx].totalSize += e.size;
+          if (e.size > 0) {
+            hist[t.nameIdx].totalAccu += e.size;
+          }
+          if (hist[t.nameIdx].totalSize > hist[t.nameIdx].totalHWM) {
+            hist[t.nameIdx].totalHWM = hist[t.nameIdx].totalSize;
+          }
+        }
+      }
+    }
+    
+    return hist;
+  };
+
   ProfilerManager.prototype.dispatchEvent = 
   function PM_dispatchEvent(name, detail) {
     var evt = new CustomEvent(name, { 'detail': detail});
