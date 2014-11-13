@@ -14,18 +14,22 @@ function start() {
   }
   var profilerManager = new ProfilerManager();
 
+  var hubElements = {
+    searchBar: document.getElementById('searchBar'),
+    startButton: document.getElementById('startRecord'),
+    stopButton: document.getElementById('stopRecord'),
+    infoTable: document.getElementById('infoTable')
+  };
+
   var hubOption = {
-    'searchBar': 'searchBar',
-    'startRecord': 'startRecord',
-    'stopRecord': 'stopRecord',
-    'infoTable': 'infoTable',
+    'elements': hubElements,
     'profilerManager': profilerManager
   };
   var hub = new Hub(hubOption);
   hub.start();
 
   var padOption = {
-    'pad': 'pad',
+    'elements': {'pad': document.getElementById('pad')},
     'profilerManager': profilerManager
   };
   var padManager = new PadManager(padOption);
