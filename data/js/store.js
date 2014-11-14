@@ -5,13 +5,28 @@
     this.names = null;
     this.traces = null;
     this.allocated = null;
+    this.init();
   }
 
   Store.prototype = {
+    init: function s_init() {
+      window.addEventListener('search', this);
+    },
+
+    handleEvent: function s_handleEvent(evt) {
+      switch(evt.type) {
+        case 'search':
+          console.log(evt.detail.term.length);
+          break;
+      }
+    },
+
     create: function s_create(names, traces, allocated) {
       this.names = names;
       this.traces = traces;
       this.allocated = allocated;
+      // notify others data is ready
+      window.dispatchEvent(new CustomEvent('dataReady'));
     },
 
     drop: function s_drop() {
