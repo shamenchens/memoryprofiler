@@ -25,13 +25,6 @@
         this.memoryProfiler.getStacktraceTable(window),
         this.memoryProfiler.getAllocatedEntries(window)
       );
-      this.dispatchEvent('dataReady');
-  };
-
-  ProfilerManager.prototype.dispatchEvent = 
-    function PM_dispatchEvent(name, detail) {
-      var evt = new CustomEvent(name, { 'detail': detail});
-      window.dispatchEvent(evt);
   };
 
   ProfilerManager.prototype.stop = function PM_stop() {

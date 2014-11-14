@@ -73,7 +73,10 @@
     },
 
     search: function HUB_search() {
-      console.log(this._elements.searchBar.value.length);
+      var term = this._elements.searchBar.value;
+      window.dispatchEvent(new CustomEvent('search',
+        {'detail':{'term': term}}
+      ));
     }
   };
   exports.Hub = Hub;
