@@ -9,6 +9,7 @@
     start: function HUB_start () {
       this._elements.startButton.addEventListener('click', this);
       this._elements.stopButton.addEventListener('click', this);
+      this._elements.startSearch.addEventListener('click', this);
       this._elements.searchBar.addEventListener('keyup', this);
       window.addEventListener('dataReady', this);
     },
@@ -22,6 +23,9 @@
               break;
             case this._elements.stopButton:
               this.stopRecord();
+              break;
+            case this._elements.startSearch:
+              this.showSearchPanel();
               break;
           }
           break;
@@ -56,6 +60,10 @@
 
     showInfo: function HUB_showInfo(evt) {
       // this._elements.infoTable.textContent = 'done!!!';
+    },
+
+    showSearchPanel: function HUB_showSearchPanel() {
+      this._elements.searchPanel.classList.toggle('active');
     },
 
     stop: function HUB_stop() {
