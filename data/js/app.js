@@ -24,8 +24,7 @@ function start() {
     infoTable: document.getElementById('infoTable')
   };
   var hubOption = {
-    'elements': hubElements,
-    'profilerManager': profilerManager
+    'elements': hubElements
   };
   var hub = new Hub(hubOption);
   hub.start();
