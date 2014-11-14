@@ -5,6 +5,7 @@
     this.names = null;
     this.traces = null;
     this.allocated = null;
+    this.uniData = [];
     this.init();
   }
 
@@ -25,6 +26,7 @@
       this.names = names;
       this.traces = traces;
       this.allocated = allocated;
+      this.preprocessData();
       // notify others data is ready
       window.dispatchEvent(new CustomEvent('dataReady'));
     },
@@ -33,19 +35,32 @@
       this.names = null;
       this.traces = null;
       this.allocated = null;
+      this.uniData = null;
+    },
+
+    preprocessData: function s_preprocessData() {
+      var names = this.names,
+          traces = this.traces,
+          allocated = this.allocated,
+          hist = this.uniData;
+      var t, e, i, j;
+
+      for (i = 0; i < names.length; i++) {
+        hist[i] = {
+          selfAccu: 0, totalAccu: 0,
+          selfSize: 0, totalSize: 0,
+          selfHWM: 0, totalHWM: 0,
+          nameIdx: i};
+      }
     },
 
     // XXX should be rename
     example1: function s_example1() {
       var names = this.names,
           traces = this.traces,
-          allocated = this.allocated;
-      var hist = [];
+          allocated = this.allocated,
+          hist = this.uniData;
       var t, e, i, j;
-      
-      for (i = 0; i < names.length; i++) {
-        hist[i] = {selfSize: 0, totalSize: 0, nameIdx: i};
-      }
       
       for (i = 0; i < allocated.length; i++) {
         var visited = [];
@@ -73,13 +88,9 @@
     example2: function s_example2() {
       var names = this.names,
           traces = this.traces,
-          allocated = this.allocated;
-      var hist = [];
+          allocated = this.allocated,
+          hist = this.uniData;
       var t, e, i, j;
-      
-      for (i = 0; i < names.length; i++) {
-        hist[i] = {selfAccu: 0, totalAccu: 0, nameIdx: i};
-      }
       
       for (i = 0; i < allocated.length; i++) {
         var visited = [];
@@ -109,13 +120,9 @@
     example3: function s_example3() {
       var names = this.names,
           traces = this.traces,
-          allocated = this.allocated;
-      var hist = [];
+          allocated = this.allocated,
+          hist = this.uniData;
       var t, e, i, j;
-      
-      for (i = 0; i < names.length; i++) {
-        hist[i] = {selfSize: 0, totalSize: 0, selfHWM: 0, totalHWM: 0, nameIdx: i};
-      }
       
       for (i = 0; i < allocated.length; i++) {
         var visited = [];
@@ -151,14 +158,9 @@
     getHistogram: function s_getHistogram() {
       var names = this.names,
           traces = this.traces,
-          allocated = this.allocated;
-      var hist = [];
+          allocated = this.allocated,
+          hist = this.uniData;
       var t, e, i, j;
-      
-      for (i = 0; i < names.length; i++) {
-        hist[i] = {selfAccu: 0, totalAccu: 0, selfSize: 0, totalSize: 0,
-                   selfHWM: 0, totalHWM: 0, nameIdx: i};
-      }
       
       for (i = 0; i < allocated.length; i++) {
         var visited = [];
