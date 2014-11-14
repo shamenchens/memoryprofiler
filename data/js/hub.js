@@ -45,13 +45,12 @@
     },
 
     startRecord: function HUB_startRecord(evt) {
-      this.profilerManager.startRecord();
+      window.dispatchEvent(new CustomEvent('start-record'));
       this.showLoading();
     },
 
     stopRecord: function HUB_stopRecord(evt) {
-      this.profilerManager.stopRecord();
-      this.profilerManager.getProfileResults();
+      window.dispatchEvent(new CustomEvent('stop-record'));
     },
 
     showLoading: function HUB_showLoading(evt) {
