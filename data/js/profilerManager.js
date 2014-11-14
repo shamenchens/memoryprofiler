@@ -34,11 +34,18 @@
 
   ProfilerManager.prototype.getProfileResults  = 
     function PM_getProfileResults () {
-      this.store.create(
-        this.memoryProfiler.getFrameNameTable(window),
-        this.memoryProfiler.getStacktraceTable(window),
-        this.memoryProfiler.getAllocatedEntries(window)
-      );
+      var getFns = [];
+      getFns.push(this.memoryProfiler.getFrameNameTable());
+      getFns.push(this.memoryProfiler.getStacktraceTable());
+      getFns.push(this.memoryProfiler.getAllocatedEntries());
+      var self = this;
+      Promise.all(getFns).then(function(Results) {
+        self.store.create(
+          Results[0],
+          Results[1],
+          Results[2]
+        );
+      });
   };
 
   ProfilerManager.prototype.stop = function PM_stop() {
