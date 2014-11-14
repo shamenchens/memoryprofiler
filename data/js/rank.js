@@ -3,7 +3,7 @@
   function RankManager(option) {
     this._elements = option.elements;
     this.rankHist = [];
-    this.profilerManager = option.profilerManager;
+    this.store = option.store;
   }
 
   RankManager.prototype.start = function RM_start() {
@@ -20,13 +20,13 @@
   };
 
   RankManager.prototype.showRankList = function RM_showRankList() {
-   this.rankHist = this.profilerManager.getHistogram();
+   this.rankHist = this.store.getHistogram();
    this.rankHist = this.sortBY(this.rankHist, 'selfHWM');
    this.template(this.rankHist);
   };
 
   RankManager.prototype.template = function RM_template(hist) {
-    var names = this.profilerManager.PR.names;
+    var names = this.store.names;
     var infoTable = '';
     for (var i = 0; i < hist.length; i++) {
       var entry = hist[i];
@@ -65,9 +65,9 @@
         this.showRankList();
         break;
       case 'click':
-        if (typeof evt.target.dataset['id'] !== 'undefined') {
-          console.log('pizza:' + evt.target.dataset['id']);
-          this.rankHist = this.sortBY(this.rankHist, evt.target.dataset['id']);
+        if (typeof evt.target.dataset.id !== 'undefined') {
+          console.log('pizza:' + evt.target.dataset.id);
+          this.rankHist = this.sortBY(this.rankHist, evt.target.dataset.id);
           this.template(this.rankHist);
         }
         break;
