@@ -16,6 +16,8 @@ function start() {
 
   var hubElements = {
     searchBar: document.getElementById('searchBar'),
+    searchPanel: document.getElementById('searchPanel'),
+    startSearch: document.getElementById('startSearch'),
     startButton: document.getElementById('startRecord'),
     stopButton: document.getElementById('stopRecord'),
     infoTable: document.getElementById('infoTable')
