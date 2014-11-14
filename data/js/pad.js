@@ -2,7 +2,7 @@
 (function(exports) {
   function PadManager (option) {
     this._elements = option.elements;
-    this.profilerManager = option.profilerManager;
+    this.store = option.store;
   }
 
   PadManager.prototype = {
@@ -20,7 +20,7 @@
 
     setupCanvas: function PL_setupCanvas() {
       var baseWidth = 10;
-      var tracePool = this.profilerManager.PR.allocated;
+      var tracePool = this.store.allocated;
       var traceCount = tracePool.length;
       if (traceCount > 0) {
         this._elements.pad.width = traceCount * baseWidth;
@@ -33,7 +33,7 @@
       var baseWidth = 10;
       var baseLine = 400;
       var ctx = this._elements.pad.getContext('2d');
-      var tracePool = this.profilerManager.PR.allocated; 
+      var tracePool = this.store.allocated;
       var start = baseLine - 40;
       ctx.strokeStyle = 'black';
       for (var i in tracePool) {

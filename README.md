@@ -15,7 +15,7 @@ Run
 ---------
 
 ```
-$ cxr run
+$ cfx run
 ```
 
 Reference

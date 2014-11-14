@@ -12,7 +12,8 @@ function start() {
   } else {
     console.log('use real memProfiler');
   }
-  var profilerManager = new ProfilerManager();
+  var store = new Store();
+  var profilerManager = new ProfilerManager(store);
 
   var hubElements = {
     searchBar: document.getElementById('searchBar'),
@@ -22,7 +23,6 @@ function start() {
     stopButton: document.getElementById('stopRecord'),
     infoTable: document.getElementById('infoTable')
   };
-
   var hubOption = {
     'elements': hubElements,
     'profilerManager': profilerManager
@@ -32,14 +32,14 @@ function start() {
 
   var padOption = {
     'elements': {'pad': document.getElementById('pad')},
-    'profilerManager': profilerManager
+    'store': store
   };
   var padManager = new PadManager(padOption);
   padManager.start();
 
   var rankOption = {
     'elements': {'infoTable': document.getElementById('infoTable')},
-    'profilerManager': profilerManager
+    'store': store
   };
   var rankManager = new RankManager(rankOption);
   rankManager.start();
