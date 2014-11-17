@@ -1,13 +1,77 @@
 'use strict';
 (function(exports) {
   function TreeManager() {
-    this.getMemoryResult();
-    this.constructUsage();
-    this.constructTrace();
+    // this.getMemoryResult();
+    // this.constructUsage();
+    // this.constructTrace();
+    // this.display();
+    this.getTreeView();
     this.display();
   }
 
-  TreeManager.prototype.getMemoryResult = function() {
+  TreeManager.prototype = {
+    getTreeView: function() {
+      var names = navigator.memprofiler.getFrameNameTable();
+      var traces = navigator.memprofiler.getStacktraceTable();
+      var allocated = navigator.memprofiler.getAllocatedEntries();
+
+      var v = [];
+      var t, e, f, r, i;
+      for (i = 0; i < allocated.length; i++) {
+        e = allocated[i];
+        t = traces[e.traceIdx];
+        if (v.indexOf(e.traceIdx) < 0) {
+          f = [];
+          r = [];
+          v.push(e.traceIdx);
+          f.push(t.nameIdx);
+          r.push(e.traceIdx);
+          r.push(t.parentIdx);
+          while (t.parentIdx !== 0) {
+            t = traces[t.parentIdx];
+            f.push(t.nameIdx);
+            r.push(t.parentIdx);
+          }
+          r.pop();
+
+          if (t.nameIdx == 0 && t.parentIdx == 0) {
+            this.addRoot(names[0]);
+          } else {
+            this.addChild(f, r);
+          }
+        } else {
+          // update allocate trace
+        }
+      }
+    },
+
+    addRoot: function(rootName) {
+      this.root = new Node({
+        name: rootName,
+        nameIdx: 0,
+        parentIdx: 0
+      });
+    },
+
+    addChild: function(functionNames, traceInfo) {
+      var names = navigator.memprofiler.getFrameNameTable();
+      var currentNode = this.root;
+      for (var i = functionNames.length - 1; i >=0; i--) {
+        var nextNode = new Node({
+          name: names[functionNames[i]],
+          nameIdx: functionNames[i],
+          traceIdx: traceInfo[i]
+        });
+        currentNode = currentNode.addChild(nextNode);
+      }
+    },
+
+    display: function() {
+      this.root.walk([], 1);
+    }
+  };
+
+  /*TreeManager.prototype.getMemoryResult = function() {
     var memoryResult = {
       frameNameTable: navigator.memprofiler.getFrameNameTable(),
       stacktraceTable: navigator.memprofiler.getStacktraceTable(),
@@ -106,12 +170,15 @@
 
   TreeManager.prototype.display = function() {
     this.root.walk([], 0);
-  };
+  };*/
 
   function Node(options) {
+    if (!this.traceIdx) {
+      this.traceIdx = [];
+    }
     this.name = options.name;
     this.nameIdx = options.nameIdx;
-    this.traceIdx = options.traceIdx;
+    this.traceIdx.push(options.traceIdx);
     this.children = [];
     this.parent = null;
     this.matrix = {
@@ -121,7 +188,7 @@
       totalSize: null,
       totalAccu: null,
       totalPeak: null
-    }
+    };
   }
 
   Node.prototype.findChildren = function(nameIdx) {
@@ -137,6 +204,7 @@
     var childNode = this.findChildren(node.nameIdx);
     if (childNode) {
       // FIXME: should update node matrix
+      childNode.traceIdx.push(node.traceIdx[0]);
       return childNode;
     } else {
       node.parent = this;
