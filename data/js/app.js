@@ -42,4 +42,10 @@ function start() {
   };
   var rankManager = new RankManager(rankOption);
   rankManager.start();
+
+  var treeOption = {
+    'store': store
+  };
+  var treeManager = new TreeManager(treeOption);
+  treeManager.start();
 }
