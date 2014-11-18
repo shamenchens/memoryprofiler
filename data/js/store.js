@@ -27,6 +27,7 @@
       this.names = names;
       this.traces = traces;
       this.allocated = allocated;
+
       this.preprocessData();
       // notify others data is ready
       window.dispatchEvent(new CustomEvent('dataReady'));
@@ -55,8 +56,8 @@
       }
     },
 
-    // XXX should be rename
-    example1: function s_example1() {
+    // for reference
+    calcTotalSize: function s_example1() {
       var names = this.names,
           traces = this.traces,
           allocated = this.allocated,
@@ -85,8 +86,8 @@
       }
     },
 
-    // XXX should be rename
-    example2: function s_example2() {
+    // for reference
+    calcTotalAccu: function s_example2() {
       var names = this.names,
           traces = this.traces,
           allocated = this.allocated,
@@ -117,8 +118,8 @@
       }
     },
 
-    // XXX should be rename
-    example3: function s_example3() {
+    // for reference
+    calcTotalPeak: function s_example3() {
       var names = this.names,
           traces = this.traces,
           allocated = this.allocated,
@@ -156,7 +157,8 @@
       }
     },
 
-    getHistogram: function s_getHistogram() {
+    // for ranklist
+    getRankList: function s_getHistogram() {
       var names = this.names,
           traces = this.traces,
           allocated = this.allocated,
@@ -170,6 +172,7 @@
         if (typeof hist[t.nameIdx] === 'undefined') {
           continue;
         }
+        // update self stat
         if (e.size > 0) {
           hist[t.nameIdx].selfAccu += e.size;
         }
@@ -178,6 +181,8 @@
         if (hist[t.nameIdx].selfSize > hist[t.nameIdx].selfPeak) {
           hist[t.nameIdx].selfPeak = hist[t.nameIdx].selfSize;
         }
+
+        // update total stat
         for (j = e.traceIdx; j != 0; j = traces[j].parentIdx) {
           t = traces[j];
           if (!visited[t.nameIdx] && typeof hist[t.nameIdx] !== 'undefined') {
@@ -196,6 +201,7 @@
       return hist;
     },
 
+    // for tree
     getTreeData: function s_getTreeData() {
       var names = this.names;
       var traces = this.traces;

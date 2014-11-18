@@ -3,7 +3,9 @@
   function RankManager(option) {
     this._elements = option.elements;
     this.rankHist = [];
+    this.filterHist = [];
     this.store = option.store;
+    this.defaultSort = 'selfPeak';
   }
 
   RankManager.prototype.start = function RM_start() {
@@ -14,14 +16,19 @@
     window.removeEventListener('dataReady', this);
   };
 
-  RankManager.prototype.sortBY = function RM_sortBY(hist, key) {
+  RankManager.prototype.sortBY = function RM_sortBY(key) {
     hist.sort(function(a,b) {return b[key] - a[key];});
     return hist;
   };
 
+  RankManager.prototype.filterBY = function RM_sortBY(hist, nameIdx) {
+//    var temp = this.store.getFilterList(key);
+    return this.sortBY(hist, this.defaultSort);
+  };
+
   RankManager.prototype.showRankList = function RM_showRankList() {
-   this.rankHist = this.store.getHistogram();
-   this.rankHist = this.sortBY(this.rankHist, 'selfPeak');
+   this.rankHist = this.store.getRankList();
+   this.rankHist = this.sortBY(this.rankHist, this.defaultSort);
    this.template(this.rankHist);
   };
 
@@ -31,11 +38,12 @@
     for (var i = 0; i < hist.length; i++) {
       var entry = hist[i];
       var fnName = names[entry.nameIdx];
-      infoTable = infoTable + '<li> ' +
+      infoTable = infoTable + '<li>' +
         '<span>' + entry.selfAccu + '</span><span>' + entry.totalAccu + '</span>' +
         '<span>' + entry.selfSize + '</span><span>' + entry.totalSize + '</span>' +
         '<span>' + entry.selfPeak + '</span><span>' + entry.totalPeak + '</span>' +
-        '<span title="' + fnName + '">' + fnName + '</span>' +
+        '<span title="' + fnName + '" class="filterable" data-filter=' + entry.nameIdx + '>' +
+        fnName + '</span>' +
       '</li>';
     }
     infoTable = '<ul>' +
@@ -57,6 +65,12 @@
       sortItem = matches[j];
       sortItem.addEventListener('click', this);
     }
+    matches = this._elements.infoTable.querySelectorAll('span.filterable');
+    sortItem = null;
+    for (var j = 0; j < matches.length; j ++) {
+      sortItem = matches[j];
+      sortItem.addEventListener('click', this);
+    }
   };
 
   RankManager.prototype.handleEvent = function RM_handleEvent(evt) {
@@ -66,9 +80,15 @@
         break;
       case 'click':
         if (typeof evt.target.dataset.id !== 'undefined') {
-          console.log('pizza:' + evt.target.dataset.id);
+          console.log('sort:' + evt.target.dataset.id);
           this.rankHist = this.sortBY(this.rankHist, evt.target.dataset.id);
           this.template(this.rankHist);
+        }
+        if (typeof evt.target.dataset.filter !== 'undefined') {
+          var nameIdx = +evt.target.dataset.filter;
+          console.log('filter by nameIdx:' + nameIdx);
+          this.filterHist = this.filterBY(this.rankHist, nameIdx);
+          this.template(this.filterHist);
         }
         break;
       default:
