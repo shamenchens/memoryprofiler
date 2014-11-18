@@ -50,7 +50,7 @@
         hist[i] = {
           selfAccu: 0, totalAccu: 0,
           selfSize: 0, totalSize: 0,
-          selfHWM: 0, totalHWM: 0,
+          selfPeak: 0, totalPeak: 0,
           nameIdx: i};
       }
     },
@@ -61,9 +61,9 @@
           traces = this.traces,
           allocated = this.allocated,
           hist = this.uniData;
-      var t, e, i, j;
-
-      for (i = 0; i < allocated.length; i++) {
+      var t, e, i, j, len;
+      
+      for (i = 0, len = allocated.length; i < len; i++) {
         var visited = [];
         e = allocated[i];
         t = traces[e.traceIdx];
@@ -91,9 +91,9 @@
           traces = this.traces,
           allocated = this.allocated,
           hist = this.uniData;
-      var t, e, i, j;
-
-      for (i = 0; i < allocated.length; i++) {
+      var t, e, i, j, len;
+      
+      for (i = 0, len = allocated.length; i < len; i++) {
         var visited = [];
         e = allocated[i];
         t = traces[e.traceIdx];
@@ -123,35 +123,35 @@
           traces = this.traces,
           allocated = this.allocated,
           hist = this.uniData;
-      var t, e, i, j;
-
-      for (i = 0; i < allocated.length; i++) {
+      var t, e, i, j, len;
+      
+      for (i = 0, len = allocated.length; i < len; i++) {
         var visited = [];
         e = allocated[i];
         t = traces[e.traceIdx];
         hist[t.nameIdx].selfSize += e.size;
-        if (hist[t.nameIdx].selfSize > hist[t.nameIdx].selfHWM) {
-          hist[t.nameIdx].selfHWM = hist[t.nameIdx].selfSize;
+        if (hist[t.nameIdx].selfSize > hist[t.nameIdx].selfPeak) {
+          hist[t.nameIdx].selfPeak = hist[t.nameIdx].selfSize;
         }
         for (j = e.traceIdx; j != 0; j = traces[j].parentIdx) {
           t = traces[j];
           if (!visited[t.nameIdx]) {
             visited[t.nameIdx] = true;
             hist[t.nameIdx].totalSize += e.size;
-            if (hist[t.nameIdx].totalSize > hist[t.nameIdx].totalHWM) {
-              hist[t.nameIdx].totalHWM = hist[t.nameIdx].totalSize;
+            if (hist[t.nameIdx].totalSize > hist[t.nameIdx].totalPeak) {
+              hist[t.nameIdx].totalPeak = hist[t.nameIdx].totalSize;
             }
           }
         }
       }
 
-      hist.sort(function(a,b) {return b.selfHWM - a.selfHWM;});
+      hist.sort(function(a,b) {return b.selfPeak - a.selfPeak;});
 
-      console.log("     SelfHWM    TotalHWM  Name");
+      console.log("     SelfPeak    TotalPeak  Name");
       for (i = j = 0; j < 20 && i < hist.length; i++) {
         // if (names[hist[i].nameIdx].search(/gbemu/) != -1) {
         // }
-        console.log("%12.0f%12.0f  %s", hist[i].selfHWM, hist[i].totalHWM, names[hist[i].nameIdx]);
+        console.log("%12.0f%12.0f  %s", hist[i].selfPeak, hist[i].totalPeak, names[hist[i].nameIdx]);
         j++;
       }
     },
@@ -161,14 +161,9 @@
           traces = this.traces,
           allocated = this.allocated,
           hist = this.uniData;
-      var t, e, i, j;
+      var t, e, i, j, len;
 
-      for (i = 0; i < names.length; i++) {
-        hist[i] = {selfAccu: 0, totalAccu: 0, selfSize: 0, totalSize: 0,
-                   selfHWM: 0, totalHWM: 0, nameIdx: i};
-      }
-
-      for (i = 0; i < allocated.length; i++) {
+      for (i = 0, len = allocated.length; i < len; i++) {
         var visited = [];
         e = allocated[i];
         t = traces[e.traceIdx];
@@ -180,8 +175,8 @@
         }
 
         hist[t.nameIdx].selfSize += e.size;
-        if (hist[t.nameIdx].selfSize > hist[t.nameIdx].selfHWM) {
-          hist[t.nameIdx].selfHWM = hist[t.nameIdx].selfSize;
+        if (hist[t.nameIdx].selfSize > hist[t.nameIdx].selfPeak) {
+          hist[t.nameIdx].selfPeak = hist[t.nameIdx].selfSize;
         }
         for (j = e.traceIdx; j != 0; j = traces[j].parentIdx) {
           t = traces[j];
@@ -191,8 +186,8 @@
             if (e.size > 0) {
               hist[t.nameIdx].totalAccu += e.size;
             }
-            if (hist[t.nameIdx].totalSize > hist[t.nameIdx].totalHWM) {
-              hist[t.nameIdx].totalHWM = hist[t.nameIdx].totalSize;
+            if (hist[t.nameIdx].totalSize > hist[t.nameIdx].totalPeak) {
+              hist[t.nameIdx].totalPeak = hist[t.nameIdx].totalSize;
             }
           }
         }
@@ -208,8 +203,8 @@
       var treeData = this.treeData;
 
       var v = [];
-      var t, e, f, r, i;
-      for (i = 0; i < allocated.length; i++) {
+      var t, e, f, r, i, len;
+      for (i = 0, len = allocated.length; i < len; i++) {
         e = allocated[i];
         t = traces[e.traceIdx];
         if (v.indexOf(e.traceIdx) < 0) {

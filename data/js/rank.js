@@ -21,7 +21,7 @@
 
   RankManager.prototype.showRankList = function RM_showRankList() {
    this.rankHist = this.store.getHistogram();
-   this.rankHist = this.sortBY(this.rankHist, 'selfHWM');
+   this.rankHist = this.sortBY(this.rankHist, 'selfPeak');
    this.template(this.rankHist);
   };
 
@@ -34,7 +34,7 @@
       infoTable = infoTable + '<li> ' +
         '<span>' + entry.selfAccu + '</span><span>' + entry.totalAccu + '</span>' +
         '<span>' + entry.selfSize + '</span><span>' + entry.totalSize + '</span>' +
-        '<span>' + entry.selfHWM + '</span><span>' + entry.totalHWM + '</span>' +
+        '<span>' + entry.selfPeak + '</span><span>' + entry.totalPeak + '</span>' +
         '<span title="' + fnName + '">' + fnName + '</span>' +
       '</li>';
     }
@@ -43,9 +43,9 @@
                     '<span class="sortable" data-id="selfAccu">Self Accu</span>' +
                     '<span class="sortable" data-id="totalAccu">Total Accu</span>' +
                     '<span class="sortable" data-id="selfSize">Self Size</span>' +
-                    '<span class="sortable" data-id="totalSize">total Size</span>' +
-                    '<span class="sortable" data-id="selfHWM">Self HWM</span>' +
-                    '<span class="sortable" data-id="totalHWM">total HWM</span>' +
+                    '<span class="sortable" data-id="totalSize">Total Size</span>' +
+                    '<span class="sortable" data-id="selfPeak">Self Peak</span>' +
+                    '<span class="sortable" data-id="totalPeak">Total Peak</span>' +
                     '<span>name</span>' +
                   '</li>' +
                  infoTable +
