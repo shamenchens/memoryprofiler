@@ -63,7 +63,7 @@
           allocated = this.allocated,
           hist = this.uniData;
       var t, e, i, j, len;
-      
+
       for (i = 0, len = allocated.length; i < len; i++) {
         var visited = [];
         e = allocated[i];
@@ -93,7 +93,7 @@
           allocated = this.allocated,
           hist = this.uniData;
       var t, e, i, j, len;
-      
+
       for (i = 0, len = allocated.length; i < len; i++) {
         var visited = [];
         e = allocated[i];
@@ -125,7 +125,7 @@
           allocated = this.allocated,
           hist = this.uniData;
       var t, e, i, j, len;
-      
+
       for (i = 0, len = allocated.length; i < len; i++) {
         var visited = [];
         e = allocated[i];
@@ -208,29 +208,29 @@
       var allocated = this.allocated;
       var treeData = this.treeData;
 
-      var v = [];
-      var t, e, f, r, i, len;
+      var visited = [];
+      var tracesEntry, allocatedEntry, functionNames, tracesInfo, i, len;
       for (i = 0, len = allocated.length; i < len; i++) {
-        e = allocated[i];
-        t = traces[e.traceIdx];
-        if (v.indexOf(e.traceIdx) < 0) {
-          f = [];
-          r = [];
-          v.push(e.traceIdx);
-          f.push(t.nameIdx);
-          r.push(e.traceIdx);
-          r.push(t.parentIdx);
-          while (t.parentIdx !== 0) {
-            t = traces[t.parentIdx];
-            f.push(t.nameIdx);
-            r.push(t.parentIdx);
+        allocatedEntry = allocated[i];
+        tracesEntry = traces[allocatedEntry.traceIdx];
+        if (visited.indexOf(allocatedEntry.traceIdx) < 0) {
+          functionNames = [];
+          tracesInfo = [];
+          visited.push(allocatedEntry.traceIdx);
+          tracesInfo.push(allocatedEntry.traceIdx);
+          tracesInfo.push(tracesEntry.parentIdx);
+          functionNames.push(tracesEntry.nameIdx);
+          while (tracesEntry.parentIdx !== 0) {
+            tracesEntry = traces[tracesEntry.parentIdx];
+            tracesInfo.push(tracesEntry.parentIdx);
+            functionNames.push(tracesEntry.nameIdx);
           }
-          r.pop();
+          tracesInfo.pop();
 
-          if (t.nameIdx === 0) {
+          if (tracesEntry.nameIdx === 0) {
             this._treeAddRoot(names[0]);
           } else {
-            this._treeAddChild(f, r);
+            this._treeAddChild(functionNames, tracesInfo);
           }
         } else {
           // FIXME: update allocate size here?
@@ -314,13 +314,6 @@
     },
 
     walk: function(visited, depth) {
-      // XXX: Remove this when UI ready
-      var indent = [];
-      for (var d = 0; d < depth; d++) {
-        indent.push('');
-      }
-      console.log(indent.join('  ') + this.name);
-      // XXX: Remove this when UI ready
       visited.push(this.nameIdx);
       if (this.children.length > 0) {
         for (var i in this.children) {

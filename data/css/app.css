@@ -53,7 +53,7 @@ section#hubPanel button {
   margin: 10px 10px;
 }
 
-section#hubPanel button#startRecord { 
+section#hubPanel button#startRecord {
 }
 
 
@@ -74,7 +74,7 @@ section#searchPanel {
   border-color: #1e1e1e;
   display: none;
   z-index: 10;
-  opacity: 0; 
+  opacity: 0;
 }
 
 section#searchPanel.active {
@@ -86,9 +86,9 @@ section#searchPanel.active {
 }
 
 section#searchPanel > span {
-  margin-left: 30px; 
-  font-size: 16px; 
-  color: #e8e8e8; 
+  margin-left: 30px;
+  font-size: 16px;
+  color: #e8e8e8;
 }
 
 input#searchBar {
@@ -96,15 +96,58 @@ input#searchBar {
   width: 70%;
 }
 
-section#TreePanel {
+section#treePanel {
   height: 300px;
+  overflow: auto;
+}
+
+section#treePanel div > span {
+  display: inline-block;
+  width: 68px;
+  height: 30px;
+  overflow : hidden;
+  padding: 3px;
+  border: 1px solid #f8f8f8;
+  border-bottom: 0px;
+}
+
+section#treePanel div > span:not(:first-child){
+  border-left: 0px;
+}
+
+section#treePanel div > span:last-child {
+  width: calc(100% - 480px);
+  text-overflow : ellipsis;
+  white-space : nowrap;
+}
+
+section#treePanel .collapseButton {
+  background: none 0 0 no-repeat transparent;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  width: 16px;
+  height: 16px;
+  overflow: hidden;
+  vertical-align: top;
+  color: transparent;
+  display: inline-block;
+  background-image: url('../images/treetwisty.svg');
+}
+
+section#treePanel .treeNode.collapsed > * > .collapseButton {
+  background-position: 0px -16px;
+}
+
+section#treePanel .treeNode.leaf > * > .collapseButton {
+  visibility: hidden;
 }
 
 /*padPanel*/
 section#padPanel {
   height: 400px;
   overflow-x: auto;
-  overflow-y: hidden; 
+  overflow-y: hidden;
 }
 
 section#padPanel canvas  {
@@ -113,12 +156,12 @@ section#padPanel canvas  {
   height: 85%;
   border: 1px solid #c8c8c8;
   border-top: 0px;
-  border-right: 0px;  
+  border-right: 0px;
 }
 
-/*infoTable*/ 
+/*infoTable*/
 section#infoTable {
-  width: 90%; 
+  width: 90%;
   height: 300px;
   overflow: auto;
 }
@@ -131,7 +174,7 @@ section#infoTable > ul{
 section#infoTable ul > li{
   margin: -4px 0px 0px 0px;
   padding: 0px;
-  background-color: #b8b8b8; 
+  background-color: #b8b8b8;
 }
 
 section#infoTable ul > li:nth-child(even){
