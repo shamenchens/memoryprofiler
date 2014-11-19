@@ -44,6 +44,7 @@ function start() {
   rankManager.start();
 
   var treeOption = {
+    'elements': {'treePanel': document.getElementById('treePanel')},
     'store': store
   };
   var treeManager = new TreeManager(treeOption);
