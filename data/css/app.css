@@ -161,6 +161,7 @@ section#infoTable ul > li:last-child > span{
   border: 1px solid #c8c8c8;
 }
 
+span.filterable,
 span.sortable {
   cursor: pointer;
 }
