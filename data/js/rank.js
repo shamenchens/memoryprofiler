@@ -16,7 +16,7 @@
     window.removeEventListener('dataReady', this);
   };
 
-  RankManager.prototype.sortBY = function RM_sortBY(key) {
+  RankManager.prototype.sortBY = function RM_sortBY(hist, key) {
     hist.sort(function(a,b) {return b[key] - a[key];});
     return hist;
   };
