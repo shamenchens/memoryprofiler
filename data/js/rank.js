@@ -21,9 +21,9 @@
     return hist;
   };
 
-  RankManager.prototype.filterBY = function RM_sortBY(hist, nameIdx) {
-//    var temp = this.store.getFilterList(key);
-    return this.sortBY(hist, this.defaultSort);
+  RankManager.prototype.filterBY = function RM_filterBY(nameIdx) {
+    var filterHist = this.store.getFilterList(nameIdx);
+    return this.sortBY(filterHist, this.defaultSort);
   };
 
   RankManager.prototype.showRankList = function RM_showRankList() {

@@ -157,6 +157,12 @@
       }
     },
 
+    // for ranklist filter
+    getFilterList: function s_getFilterList(nameIdx) {
+      var hist = this.uniData;
+      return hist;
+    },
+
     // for ranklist
     getRankList: function s_getHistogram() {
       var names = this.names,
