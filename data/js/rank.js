@@ -22,7 +22,7 @@
   };
 
   RankManager.prototype.filterBY = function RM_filterBY(nameIdx) {
-    var filterHist = this.store.getFilterList(nameIdx);
+    var filterHist = this.store.getFilterList(+nameIdx);
     return this.sortBY(filterHist, this.defaultSort);
   };
 
