@@ -49,10 +49,12 @@
 
       for (i = 0; i < names.length; i++) {
         hist[i] = {
+          nameIdx: i,
+          parent: null, childs: [],
           selfAccu: 0, totalAccu: 0,
           selfSize: 0, totalSize: 0,
-          selfPeak: 0, totalPeak: 0,
-          nameIdx: i};
+          selfPeak: 0, totalPeak: 0
+          };
       }
     },
 
@@ -157,42 +159,68 @@
       }
     },
 
+    gatherList: function s_gatherList(tmp, hist, nameIdx) {
+      console.log('XXX '+ hist[nameIdx].nameIdx);
+      tmp.push(hist[nameIdx]);
+      if (hist[nameIdx].parent !== null) {
+        this.gatherList(tmp, hist, hist[nameIdx].parent);
+      } else {
+        return tmp;
+      }
+//      hist[nameIdx].childs.forEach(function(idx)) {
+//        this.gatherList(hist, idx);
+//      }.bind(this);
+    },
+
+    // for ranklist filter
+    getFilterList: function s_getFilterList(nameIdx) {
+      var tempList = [];
+      return this.gatherList(tempList, this.uniData, nameIdx);
+    },
+
     // for ranklist
     getRankList: function s_getHistogram() {
       var names = this.names,
           traces = this.traces,
           allocated = this.allocated,
           hist = this.uniData;
-      var t, e, i, j, len;
+      var tracesEntry, allocatedEntry, parentTraceEntry, i, j, len;
 
       for (i = 0, len = allocated.length; i < len; i++) {
         var visited = [];
-        e = allocated[i];
-        t = traces[e.traceIdx];
-        if (typeof hist[t.nameIdx] === 'undefined') {
+        allocatedEntry = allocated[i];
+        tracesEntry = traces[allocatedEntry.traceIdx];
+        if (typeof hist[tracesEntry.nameIdx] === 'undefined') {
           continue;
         }
-        // update self stat
-        if (e.size > 0) {
-          hist[t.nameIdx].selfAccu += e.size;
+        // add parent and childs
+        parentTraceEntry = traces[tracesEntry.parentIdx];
+        hist[tracesEntry.nameIdx].parent = parentTraceEntry.nameIdx;
+        if (hist[parentTraceEntry.nameIdx].childs.indexOf(tracesEntry.nameIdx) < 0) {
+          hist[parentTraceEntry.nameIdx].childs.push(tracesEntry.nameIdx);
         }
 
-        hist[t.nameIdx].selfSize += e.size;
-        if (hist[t.nameIdx].selfSize > hist[t.nameIdx].selfPeak) {
-          hist[t.nameIdx].selfPeak = hist[t.nameIdx].selfSize;
+        // update self stat
+        if (allocatedEntry.size > 0) {
+          hist[tracesEntry.nameIdx].selfAccu += allocatedEntry.size;
+        }
+
+        hist[tracesEntry.nameIdx].selfSize += allocatedEntry.size;
+        if (hist[tracesEntry.nameIdx].selfSize > hist[tracesEntry.nameIdx].selfPeak) {
+          hist[tracesEntry.nameIdx].selfPeak = hist[tracesEntry.nameIdx].selfSize;
         }
 
         // update total stat
-        for (j = e.traceIdx; j != 0; j = traces[j].parentIdx) {
-          t = traces[j];
-          if (!visited[t.nameIdx] && typeof hist[t.nameIdx] !== 'undefined') {
-            visited[t.nameIdx] = true;
-            hist[t.nameIdx].totalSize += e.size;
-            if (e.size > 0) {
-              hist[t.nameIdx].totalAccu += e.size;
+        for (j = allocatedEntry.traceIdx; j != 0; j = traces[j].parentIdx) {
+          tracesEntry = traces[j];
+          if (!visited[tracesEntry.nameIdx] && typeof hist[tracesEntry.nameIdx] !== 'undefined') {
+            visited[tracesEntry.nameIdx] = true;
+            hist[tracesEntry.nameIdx].totalSize += allocatedEntry.size;
+            if (allocatedEntry.size > 0) {
+              hist[tracesEntry.nameIdx].totalAccu += allocatedEntry.size;
             }
-            if (hist[t.nameIdx].totalSize > hist[t.nameIdx].totalPeak) {
-              hist[t.nameIdx].totalPeak = hist[t.nameIdx].totalSize;
+            if (hist[tracesEntry.nameIdx].totalSize > hist[tracesEntry.nameIdx].totalPeak) {
+              hist[tracesEntry.nameIdx].totalPeak = hist[tracesEntry.nameIdx].totalSize;
             }
           }
         }
