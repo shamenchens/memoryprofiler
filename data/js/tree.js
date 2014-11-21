@@ -29,16 +29,16 @@
       this.addTreeHeader();
       this.addTreeNode(treeData.root, 0);
       this.addNodeEventListener();
-      this.collapseRoot();
+      // this.collapseRoot();
     },
 
     addTreeHeader: function tm_addTreeHeader() {
       var treeHeader = '<div class="treeHeader">' +
-        '<span>selfSize</span>' +
         '<span>selfAccu</span>' +
-        '<span>selfPeak</span>' +
-        '<span>totalSize</span>' +
         '<span>totalAccu</span>' +
+        '<span>selfSize</span>' +
+        '<span>totalSize</span>' +
+        '<span>selfPeak</span>' +
         '<span>totalPeak</span>' +
         '<span>name</span>' +
         '</div>';
@@ -49,11 +49,11 @@
       var nodeClass = node.children.length > 0 ? 'treeNode' : 'treeNode leaf';
       var treeNode = '';
       treeNode = '<div class="' + nodeClass + '" data-depth="' + depth +'">' +
-        '<span>' + node.matrix.selfSize + '</span>' +
         '<span>' + node.matrix.selfAccu + '</span>' +
-        '<span>' + node.matrix.selfPeak + '</span>' +
-        '<span>' + node.matrix.totalSize + '</span>' +
         '<span>' + node.matrix.totalAccu + '</span>' +
+        '<span>' + node.matrix.selfSize + '</span>' +
+        '<span>' + node.matrix.totalSize + '</span>' +
+        '<span>' + node.matrix.selfPeak + '</span>' +
         '<span>' + node.matrix.totalPeak + '</span>' +
         '<span>' +
         '<span style="margin-left:' + depth + 'em;"' +

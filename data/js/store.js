@@ -237,57 +237,106 @@
       var treeData = this.treeData;
 
       var visited = [];
-      var tracesEntry, allocatedEntry, functionNames, tracesInfo, i, len;
+      var traceIdx, tracesEntry, allocatedEntry,
+          traceNames, tracesIdxs, size, i, len;
       for (i = 0, len = allocated.length; i < len; i++) {
         allocatedEntry = allocated[i];
+        size = allocatedEntry.size;
+        traceIdx = allocatedEntry.traceIdx;
         tracesEntry = traces[allocatedEntry.traceIdx];
-        if (visited.indexOf(allocatedEntry.traceIdx) < 0) {
-          functionNames = [];
-          tracesInfo = [];
-          visited.push(allocatedEntry.traceIdx);
-          tracesInfo.push(allocatedEntry.traceIdx);
-          tracesInfo.push(tracesEntry.parentIdx);
-          functionNames.push(tracesEntry.nameIdx);
-          while (tracesEntry.parentIdx !== 0) {
-            tracesEntry = traces[tracesEntry.parentIdx];
-            tracesInfo.push(tracesEntry.parentIdx);
-            functionNames.push(tracesEntry.nameIdx);
-          }
-          tracesInfo.pop();
+        traceNames = this._getTraceNames(tracesEntry);
+        tracesIdxs = this._getTraceIndecies(traceIdx, tracesEntry);
 
+        if (visited.indexOf(traceIdx) < 0) {
+          visited.push(traceIdx);
           if (tracesEntry.nameIdx === 0) {
-            this._treeAddRoot(names[0]);
+            this._treeAddRoot(names[0], size);
           } else {
-            this._treeAddChild(functionNames, tracesInfo);
+            this._treeAddChild(traceNames, tracesIdxs, size);
           }
         } else {
-          // FIXME: update allocate size here?
+          if (tracesEntry.nameIdx === 0) {
+            this._treeUpdateRoot(size);
+          } else {
+            this._treeUpdateChild(traceNames, tracesIdxs, size);
+          }
         }
       }
 
       return treeData;
     },
 
-    _treeAddRoot: function s__treeAddRoot(rootName) {
+    _getTraceNames: function s__getTraceNames(tracesEntry) {
+      var traceNames = [];
+      traceNames.push(tracesEntry.nameIdx);
+      while (tracesEntry.parentIdx !== 0) {
+        tracesEntry = this.traces[tracesEntry.parentIdx];
+        traceNames.push(tracesEntry.nameIdx);
+      }
+      return traceNames;
+    },
+
+    _getTraceIndecies: function s__getTraceIndecies(traceIdx, tracesEntry) {
+      var traceIdxs = [];
+      traceIdxs.push(traceIdx);
+      while (tracesEntry.parentIdx !== 0) {
+        traceIdxs.push(tracesEntry.parentIdx);
+        tracesEntry = this.traces[tracesEntry.parentIdx];
+      }
+      return traceIdxs;
+    },
+
+    _treeAddRoot: function s__treeAddRoot(rootName, size) {
       this.treeData.root = new Node({
         name: rootName,
         nameIdx: 0,
-        parentIdx: 0
+        parentIdx: 0,
+        selfSize: size,
+        selfAccu: size,
+        selfPeak: size
       });
     },
 
-    _treeAddChild: function s__treeAddChild(functionNames, tracesInfo) {
+    _treeUpdateRoot: function s__treeUpdateRoot(size) {
+      this.treeData.root.updateMatrix(size, true);
+    },
+
+    _treeAddChild: function s__treeAddChild(traceNames, tracesIdxs, size) {
       var names = this.names;
       var currentNode = this.treeData.root;
-      for (var i = functionNames.length - 1; i >=0; i--) {
+      for (var i = traceNames.length - 1; i >=0; i--) {
         var nodeOption = {
-          name: names[functionNames[i]],
-          nameIdx: functionNames[i],
-          traceIdx: tracesInfo[i]
+          name: names[traceNames[i]],
+          nameIdx: traceNames[i],
+          traceIdx: tracesIdxs[i]
         };
+        if (i === 0) {
+          nodeOption.selfSize = size;
+          nodeOption.selfAccu = size;
+          nodeOption.selfPeak = size;
+        }
+        if (i === traceNames.length - 1) {
+          nodeOption.totalSize = size;
+          nodeOption.totalAccu = size;
+          nodeOption.totalPeak = size;
+        }
         currentNode = currentNode.addChild(nodeOption);
       }
-    }
+    },
+
+    _treeUpdateChild: function s__treeUpdateChild(traceNames, traceIdxs, size) {
+      var currentNode = this.treeData.root;
+      for (var i = traceNames.length - 1; i >= 0; i--) {
+        currentNode = currentNode.findChildrenByNameIdx(traceNames[i]);
+        if (i === traceNames.length - 1) {
+          currentNode.updateMatrix(size, false);
+        }
+        if (currentNode.traceIdx.indexOf(traceIdxs[i]) < 0) {
+          currentNode.traceIdx.push(traceIdxs[i]);
+        }
+      }
+      currentNode.updateMatrix(size, true);
+    },
   };
 
   function Node(options) {
@@ -318,12 +367,7 @@
 
     addChild: function(nodeOption) {
       var childNode = this.findChildrenByNameIdx(nodeOption.nameIdx);
-      if (childNode) {
-        // Already has node, update child node traceIdx array
-        childNode.traceIdx.push(nodeOption.traceIdx);
-        // FIXME: update allocate size here?
-      } else {
-        // Node not exist, push new node
+      if (!childNode) {
         childNode = new Node(nodeOption);
         childNode.parent = this;
         this.children.push(childNode);
@@ -331,14 +375,24 @@
       return childNode;
     },
 
-    updateChild: function(nodeOption) {
-      // FIXME: To be determined
-      this.matrix.selfSize += nodeOption.matrix.selfSize;
-      this.matrix.selfAccu += nodeOption.matrix.selfAccu;
-      this.matrix.selfPeak += nodeOption.matrix.selfPeak;
-      this.matrix.totalSize += nodeOption.matrix.totalSize;
-      this.matrix.totalAccu += nodeOption.matrix.totalAccu;
-      this.matrix.totalPeak += nodeOption.matrix.totalPeak;
+    updateMatrix: function(size, self) {
+      if (self) {
+        this.matrix.selfSize += size;
+        if (size > 0) {
+          this.matrix.selfAccu += size;
+        }
+        if (this.matrix.selfSize > this.matrix.selfPeak) {
+          this.matrix.selfPeak = this.matrix.selfSize;
+        }
+      } else {
+        this.matrix.totalSize += size;
+        if (size > 0) {
+          this.matrix.totalAccu += size;
+        }
+        if (this.matrix.totalSize > this.matrix.totalPeak) {
+          this.matrix.totalPeak = this.matrix.totalSize;
+        }
+      }
     },
 
     walk: function(visited, depth) {
