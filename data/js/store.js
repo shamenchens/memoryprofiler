@@ -58,6 +58,10 @@
       }
     },
 
+    getNames: function s_getNames() {
+      return this.names;
+    },
+
     // for reference
     calcTotalSize: function s_example1() {
       var names = this.names,
@@ -159,23 +163,10 @@
       }
     },
 
-    gatherList: function s_gatherList(tmp, hist, nameIdx) {
-      console.log('XXX '+ hist[nameIdx].nameIdx);
-      tmp.push(hist[nameIdx]);
-      if (hist[nameIdx].parent !== null) {
-        this.gatherList(tmp, hist, hist[nameIdx].parent);
-      } else {
-        return tmp;
-      }
-//      hist[nameIdx].childs.forEach(function(idx)) {
-//        this.gatherList(hist, idx);
-//      }.bind(this);
-    },
-
     // for ranklist filter
     getFilterList: function s_getFilterList(nameIdx) {
-      var tempList = [];
-      return this.gatherList(tempList, this.uniData, nameIdx);
+      var hist = this.uniData;
+      return this.hist;
     },
 
     // for ranklist
