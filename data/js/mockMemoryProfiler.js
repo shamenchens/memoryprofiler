@@ -26,15 +26,15 @@
       },
 
       getFrameNameTable: function MP_getFrameNameTable(window){
-        return this.getJSON('resource/names-simple.json');
+        return this.getJSON('resource/names.json');
       },
 
       getStacktraceTable: function MP_getStacktraceTable(window){
-        return this.getJSON('resource/traces-simple.json');
+        return this.getJSON('resource/traces.json');
       },
 
       getAllocatedEntries: function MP_getAllocatedEntries(window){
-        return this.getJSON('resource/allocated-simple.json');
+        return this.getJSON('resource/allocated.json');
       },
 
       getJSON: function MP_getJSON(url) {
