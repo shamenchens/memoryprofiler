@@ -1,4 +1,7 @@
 'use strict';
+RegExp.escape = function(text) {
+  return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+};
 
 (function(exports) {
   function Store() {
@@ -48,6 +51,7 @@
       var t, e, i, j;
 
       for (i = 0; i < names.length; i++) {
+        names[i] = RegExp.escape(names[i]);
         hist[i] = {
           nameIdx: i,
           parent: null, childs: [],
@@ -187,6 +191,10 @@
         // add parent and childs
         parentTraceEntry = traces[tracesEntry.parentIdx];
         hist[tracesEntry.nameIdx].parent = parentTraceEntry.nameIdx;
+        // XXX hack
+        if (typeof hist[parentTraceEntry.nameIdx] === 'undefined') {
+          continue;
+        }
         if (hist[parentTraceEntry.nameIdx].childs.indexOf(tracesEntry.nameIdx) < 0) {
           hist[parentTraceEntry.nameIdx].childs.push(tracesEntry.nameIdx);
         }
