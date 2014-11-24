@@ -250,20 +250,26 @@
         traceNames = this._getTraceNames(tracesEntry);
         tracesIdxs = this._getTraceIndecies(traceIdx, tracesEntry);
 
-        if (visited.indexOf(traceIdx) < 0) {
-          visited.push(traceIdx);
-          if (tracesEntry.nameIdx === 0) {
-            this._treeUpdateRoot(size);
-          } else {
-            this._treeAddChild(traceNames, tracesIdxs, size);
-          }
+        if (tracesEntry.nameIdx === 0) {
+          this._treeUpdateRoot(size);
         } else {
-          if (tracesEntry.nameIdx === 0) {
-            this._treeUpdateRoot(size);
-          } else {
-            this._treeUpdateChild(traceNames, tracesIdxs, size);
-          }
+          // update or add child
+          this._treeAddOrUpdateChild(traceNames, tracesIdxs, size);
         }
+        // if (visited.indexOf(traceIdx) < 0) {
+        //   visited.push(traceIdx);
+        //   if (tracesEntry.nameIdx === 0) {
+        //     this._treeUpdateRoot(size);
+        //   } else {
+        //     this._treeAddChild(traceNames, tracesIdxs, size);
+        //   }
+        // } else {
+        //   if (tracesEntry.nameIdx === 0) {
+        //     this._treeUpdateRoot(size);
+        //   } else {
+        //     this._treeUpdateChild(traceNames, tracesIdxs, size);
+        //   }
+        // }
       }
 
       return treeData;
@@ -302,6 +308,29 @@
 
     _treeUpdateRoot: function s__treeUpdateRoot(size) {
       this.treeData.root.updateMatrix(size, true);
+    },
+
+    _treeAddOrUpdateChild: function s__treeAddOrUpdateChild(traceNames, tracesIdxs, size) {
+      var names = this.names;
+      var currentNode = this.treeData.root;
+      for (var i = traceNames.length - 1; i >= 0; i--) {
+        var nodeOption = {
+          name: names[traceNames[i]],
+          nameIdx: traceNames[i],
+          traceIdx: tracesIdxs[i]
+        };
+        // Set self size for leaf node
+        if (i === 0) {
+          nodeOption.selfSize = size;
+          nodeOption.selfAccu = size;
+          nodeOption.selfPeak = size;
+        }
+        // Set total size for all parent nodes
+        nodeOption.totalSize = size;
+        nodeOption.totalAccu = size;
+        nodeOption.totalPeak = size;
+        currentNode = currentNode.addOrUpdateChild(nodeOption);
+      }
     },
 
     _treeAddChild: function s__treeAddChild(traceNames, tracesIdxs, size) {
@@ -373,6 +402,19 @@
         this.children.push(childNode);
       } else {
         // Update total if node exists, note totalSize = totalAccu = totalPeak
+        childNode.updateMatrix(nodeOption.totalSize, false);
+      }
+      return childNode;
+    },
+
+    addOrUpdateChild: function(nodeOption) {
+      var childNode = this.findChildrenByNameIdx(nodeOption.nameIdx);
+      if (!childNode) {
+        childNode = new Node(nodeOption);
+        childNode.parent = this;
+        this.children.push(childNode);
+      } else {
+        // Update total if node exist, note totalSize = totalAccu = totalPeak
         childNode.updateMatrix(nodeOption.totalSize, false);
       }
       return childNode;
