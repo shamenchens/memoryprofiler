@@ -1,7 +1,10 @@
 'use strict';
-RegExp.escape = function(text) {
-  return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
-};
+function escapeHtml(html){
+  var text = document.createTextNode(html);
+  var div = document.createElement('div');
+  div.appendChild(text);
+  return div.innerHTML;
+}
 
 (function(exports) {
   function Store() {
@@ -51,7 +54,7 @@ RegExp.escape = function(text) {
       var t, e, i, j;
 
       for (i = 0; i < names.length; i++) {
-        names[i] = RegExp.escape(names[i]);
+        names[i] = escapeHTML(names[i]);
         hist[i] = {
           nameIdx: i,
           parent: null, childs: [],
