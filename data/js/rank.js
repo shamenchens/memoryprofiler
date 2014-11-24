@@ -22,7 +22,7 @@
   };
 
   RankManager.prototype.filterBY = function RM_filterBY(nameIdx) {
-    var filterHist = this.store.getFilterList(+nameIdx);
+    var filterHist = this.store.getFilterList(nameIdx);
     return this.sortBY(filterHist, this.defaultSort);
   };
 
@@ -87,7 +87,7 @@
         if (typeof evt.target.dataset.filter !== 'undefined') {
           var nameIdx = +evt.target.dataset.filter;
           console.log('filter by nameIdx:' + nameIdx);
-          this.filterHist = this.filterBY(this.rankHist, nameIdx);
+          this.filterHist = this.filterBY(nameIdx);
           this.template(this.filterHist);
         }
         break;
