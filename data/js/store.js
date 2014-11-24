@@ -313,16 +313,16 @@
           nameIdx: traceNames[i],
           traceIdx: tracesIdxs[i]
         };
+        // Set self size for leaf node
         if (i === 0) {
           nodeOption.selfSize = size;
           nodeOption.selfAccu = size;
           nodeOption.selfPeak = size;
         }
-        if (i === traceNames.length - 1) {
-          nodeOption.totalSize = size;
-          nodeOption.totalAccu = size;
-          nodeOption.totalPeak = size;
-        }
+        // Set total size for all parent nodes
+        nodeOption.totalSize = size;
+        nodeOption.totalAccu = size;
+        nodeOption.totalPeak = size;
         currentNode = currentNode.addChild(nodeOption);
       }
     },
@@ -331,13 +331,10 @@
       var currentNode = this.treeData.root;
       for (var i = traceNames.length - 1; i >= 0; i--) {
         currentNode = currentNode.findChildrenByNameIdx(traceNames[i]);
-        if (i === traceNames.length - 1) {
-          currentNode.updateMatrix(size, false);
-        }
-        if (currentNode.traceIdx.indexOf(traceIdxs[i]) < 0) {
-          currentNode.traceIdx.push(traceIdxs[i]);
-        }
+        // Only update total for parent nodes
+        currentNode.updateMatrix(size, false);
       }
+      // Only update self for leaf node
       currentNode.updateMatrix(size, true);
     },
   };
@@ -374,6 +371,9 @@
         childNode = new Node(nodeOption);
         childNode.parent = this;
         this.children.push(childNode);
+      } else {
+        // Update total if node exists, note totalSize = totalAccu = totalPeak
+        childNode.updateMatrix(nodeOption.totalSize, false);
       }
       return childNode;
     },
