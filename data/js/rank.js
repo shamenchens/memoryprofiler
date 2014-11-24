@@ -33,7 +33,7 @@
   };
 
   RankManager.prototype.template = function RM_template(hist) {
-    var names = this.store.names;
+    var names = this.store.getNames();
     var infoTable = '';
     for (var i = 0; i < hist.length; i++) {
       var entry = hist[i];
