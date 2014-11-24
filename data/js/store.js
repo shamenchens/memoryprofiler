@@ -241,6 +241,9 @@ function escapeHtml(html){
       var visited = [];
       var traceIdx, tracesEntry, allocatedEntry,
           traceNames, tracesIdxs, size, i, len;
+
+      this._treeAddRoot(names[0], 0);
+
       for (i = 0, len = allocated.length; i < len; i++) {
         allocatedEntry = allocated[i];
         size = allocatedEntry.size;
@@ -252,7 +255,7 @@ function escapeHtml(html){
         if (visited.indexOf(traceIdx) < 0) {
           visited.push(traceIdx);
           if (tracesEntry.nameIdx === 0) {
-            this._treeAddRoot(names[0], size);
+            this._treeUpdateRoot(size);
           } else {
             this._treeAddChild(traceNames, tracesIdxs, size);
           }
