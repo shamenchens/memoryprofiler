@@ -6,12 +6,12 @@
         <meta name="description" content="Memory Profiler">
         <meta name="viewport" content="width=device-width">
         <link rel="stylesheet" href="css/app.css">
-        <script type="text/javascript" src="js/pad.js" defer></script>
-        <script type="text/javascript" src="js/hub.js" defer></script>
-        <script type="text/javascript" src="js/rank.js" defer></script>
-        <script type="text/javascript" src="js/store.js" defer></script>
-        <script type="text/javascript" src="js/tree.js" defer></script>
-        <script type="text/javascript" src="js/profilerManager.js" defer></script>
+        <script type="text/javascript" src="js/shared/pad.js" defer></script>
+        <script type="text/javascript" src="js/shared/hub.js" defer></script>
+        <script type="text/javascript" src="js/shared/rank.js" defer></script>
+        <script type="text/javascript" src="js/shared/store.js" defer></script>
+        <script type="text/javascript" src="js/shared/tree.js" defer></script>
+        <script type="text/javascript" src="js/shared/profilerManager.js" defer></script>
         <script type="text/javascript" src="js/mockMemoryProfiler.js" defer></script>
         <script type="text/javascript" src="js/app.js" defer></script>
     </head>
@@ -21,6 +21,7 @@
           <section id="hubPanel" class="panel">
             <button type="button" id="startRecord">Start</button>
             <button type="button" id="stopRecord">Stop</button>
+            <button type="button" id="resetRecord">Reset</button>
             <button type="button" id="startSearch">Search</button>
           </section>
         </div>
@@ -42,6 +43,8 @@
                </li>
              </ul>
              -->
+          </section>
+          <section id="filterTable" class="panel">
           </section>
           <section id="treePanel" class="panel">
             <!--

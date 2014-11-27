@@ -21,6 +21,7 @@ function start() {
     startSearch: document.getElementById('startSearch'),
     startButton: document.getElementById('startRecord'),
     stopButton: document.getElementById('stopRecord'),
+    resetButton: document.getElementById('resetRecord'),
     infoTable: document.getElementById('infoTable')
   };
   var hubOption = {
@@ -37,7 +38,10 @@ function start() {
   padManager.start();
 
   var rankOption = {
-    'elements': {'infoTable': document.getElementById('infoTable')},
+    'elements': {
+      'infoTable': document.getElementById('infoTable'),
+      'filterTable': document.getElementById('filterTable')
+    },
     'store': store
   };
   var rankManager = new RankManager(rankOption);
